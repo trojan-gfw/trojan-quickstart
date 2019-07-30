@@ -1,6 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
+function prompt() {
+    while true; do
+        read -p "$1 [y/N] " yn
+        case $yn in
+            [Yy] ) return 0;;
+            [Nn]|"" ) return 1;;
+        esac
+    done
+}
+
 if [[ $(id -u) != 0 ]]; then
     echo Please run this script as root.
     exit 1
@@ -32,11 +42,16 @@ echo Installing $NAME $VERSION to $BINARYPATH...
 install -Dm755 "$NAME" "$BINARYPATH"
 
 echo Installing $NAME server config to $CONFIGPATH...
-install -Dm644 examples/server.json-example "$CONFIGPATH"
+if ! [[ -f "$CONFIGPATH" ]] || prompt "The server config already exists in $CONFIGPATH, overwrite?"; then
+    install -Dm644 examples/server.json-example "$CONFIGPATH"
+else
+    echo Skipping installing $NAME server config...
+fi
 
-if [[ -e "$SYSTEMDPREFIX" ]]; then
+if [[ -d "$SYSTEMDPREFIX" ]]; then
     echo Installing $NAME systemd service to $SYSTEMDPATH...
-    cat > "$SYSTEMDPATH" << EOF
+    if ! [[ -f "$SYSTEMDPATH" ]] || prompt "The systemd service already exists in $SYSTEMDPATH, overwrite?"; then
+        cat > "$SYSTEMDPATH" << EOF
 [Unit]
 Description=trojan
 Documentation=https://trojan-gfw.github.io/trojan/config https://trojan-gfw.github.io/trojan/
@@ -52,8 +67,11 @@ ExecReload=/bin/kill -HUP \$MAINPID
 WantedBy=multi-user.target
 EOF
 
-    echo Reloading systemd daemon...
-    systemctl daemon-reload
+        echo Reloading systemd daemon...
+        systemctl daemon-reload
+    else
+        echo Skipping installing $NAME systemd service...
+    fi
 fi
 
 echo Deleting temp directory $TMPDIR...
