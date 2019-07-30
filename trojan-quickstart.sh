@@ -53,8 +53,8 @@ if [[ -d "$SYSTEMDPREFIX" ]]; then
     if ! [[ -f "$SYSTEMDPATH" ]] || prompt "The systemd service already exists in $SYSTEMDPATH, overwrite?"; then
         cat > "$SYSTEMDPATH" << EOF
 [Unit]
-Description=trojan
-Documentation=https://trojan-gfw.github.io/trojan/config https://trojan-gfw.github.io/trojan/
+Description=$NAME
+Documentation=https://trojan-gfw.github.io/$NAME/config https://trojan-gfw.github.io/$NAME/
 After=network.target network-online.target nss-lookup.target mysql.service mariadb.service mysqld.service
 
 [Service]
