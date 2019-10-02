@@ -17,7 +17,7 @@ if [[ $(id -u) != 0 ]]; then
 fi
 
 NAME=trojan
-VERSION=1.12.3
+VERSION=1.13.0
 TARBALL="$NAME-$VERSION-linux-amd64.tar.xz"
 DOWNLOADURL="https://github.com/trojan-gfw/$NAME/releases/download/v$VERSION/$TARBALL"
 TMPDIR="$(mktemp -d)"
