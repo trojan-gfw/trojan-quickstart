@@ -62,6 +62,8 @@ Type=simple
 StandardError=journal
 ExecStart="$BINARYPATH" "$CONFIGPATH"
 ExecReload=/bin/kill -HUP \$MAINPID
+Restart=on-failure
+RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
