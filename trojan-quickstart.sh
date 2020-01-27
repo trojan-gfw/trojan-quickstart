@@ -16,6 +16,11 @@ if [[ $(id -u) != 0 ]]; then
     exit 1
 fi
 
+if [[ $(uname -m 2> /dev/null) != x86_64 ]]; then
+    echo Please run this script on x86_64 machine.
+    exit 1
+fi
+
 NAME=trojan
 VERSION=1.14.1
 TARBALL="$NAME-$VERSION-linux-amd64.tar.xz"
