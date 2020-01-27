@@ -17,7 +17,7 @@ if [[ $(id -u) != 0 ]]; then
 fi
 
 NAME=trojan
-VERSION=1.13.0
+VERSION=1.14.1
 TARBALL="$NAME-$VERSION-linux-amd64.tar.xz"
 DOWNLOADURL="https://github.com/trojan-gfw/$NAME/releases/download/v$VERSION/$TARBALL"
 TMPDIR="$(mktemp -d)"
@@ -32,7 +32,7 @@ echo Entering temp directory $TMPDIR...
 cd "$TMPDIR"
 
 echo Downloading $NAME $VERSION...
-curl -LO "$DOWNLOADURL" || wget "$DOWNLOADURL"
+curl -LO --progress-bar "$DOWNLOADURL" || wget -q --show-progress "$DOWNLOADURL"
 
 echo Unpacking $NAME $VERSION...
 tar xf "$TARBALL"
@@ -62,6 +62,8 @@ Type=simple
 StandardError=journal
 ExecStart="$BINARYPATH" "$CONFIGPATH"
 ExecReload=/bin/kill -HUP \$MAINPID
+Restart=on-failure
+RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
