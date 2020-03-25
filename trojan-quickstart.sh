@@ -67,6 +67,8 @@ Type=simple
 StandardError=journal
 ExecStart="$BINARYPATH" "$CONFIGPATH"
 ExecReload=/bin/kill -HUP \$MAINPID
+LimitNOFILE=51200
+LimitNPROC=51200
 Restart=on-failure
 RestartSec=1s
 
