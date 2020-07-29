@@ -65,6 +65,8 @@ After=network.target network-online.target nss-lookup.target mysql.service maria
 [Service]
 Type=simple
 StandardError=journal
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=99
 ExecStart="$BINARYPATH" "$CONFIGPATH"
 ExecReload=/bin/kill -HUP \$MAINPID
 LimitNOFILE=51200
